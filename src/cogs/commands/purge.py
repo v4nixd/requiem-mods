@@ -1,5 +1,4 @@
-# EXAMPLE COMMAND
-from disnake import AppCmdInter, DMChannel, GroupChannel, PartialMessageable, Member, DiscordException
+from disnake import AppCmdInter, DMChannel, GroupChannel, PartialMessageable, Member
 from disnake.ext import commands
 
 from src.config import Config
@@ -33,9 +32,7 @@ class PurgeCommand(commands.Cog):
             return
 
         if not inter.author.get_role(admin_role_id):
-            await inter.edit_original_response(
-                "❌ Insufficient permissions"
-            )
+            await inter.edit_original_response("❌ Insufficient permissions")
             return
 
         deleted = await channel.purge(limit=amount)

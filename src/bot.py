@@ -7,6 +7,7 @@ class Bot:
         self, intents: Intents = Intents.default(), reload: bool = False
     ) -> None:
         self.intents = intents
+        self.intents.members = True
         self.reload = reload
         self.client: commands.InteractionBot = commands.InteractionBot(
             intents=self.intents, reload=self.reload

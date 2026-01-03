@@ -4,6 +4,6 @@ bot:
     name: "🚧 Under active development"
     type: "playing"
   roles:
-    admin:
-      id: 1279053567155634199
-      name: "Admin"
+    autorole:
+      id: 1457098745970950145
+      name: "Auto-role"
