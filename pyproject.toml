@@ -1,0 +1,27 @@
+[project]
+name = "disnake-template"
+version = "0.1.0"
+description = "Template for my disnake bots"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "disnake>=2.11.0",
+    "pydantic>=2.12.5",
+    "python-dotenv>=1.2.1",
+    "pyyaml>=6.0.3",
+]
+
+[dependency-groups]
+dev = [
+    "isort>=7.0.0",
+    "pyright>=1.1.407",
+    "ruff>=0.14.10",
+    "taskipy>=1.14.1",
+]
+
+[tool.taskipy.tasks]
+dev = "python -m src.main"
+lint = "ruff check"
+format = "ruff format"
+types = "pyright"
+check = "ruff check && ruff format && pyright"

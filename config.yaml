@@ -1,0 +1,9 @@
+bot:
+  activity:
+    status: "idle"
+    name: "🚧 Under active development"
+    type: "playing"
+  roles:
+    admin:
+      id: 1279053567155634199
+      name: "Admin"
