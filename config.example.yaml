@@ -4,6 +4,22 @@ bot:
     name: "Text under nickname in member list"
     type: "playing"
   roles:
+    roles:
     autorole:
       id: 0
       name: "Auto-role"
+    verified:
+      id: 0
+      name: "Verified"
+    owner:
+      id: 0
+      name: "Owner"
+    admin:
+      id: 0
+      name: "Admin"
+    trusted:
+      id: 0
+      name: "Trusted"
+    moderator:
+      id: 0
+      name: "Moderator"
