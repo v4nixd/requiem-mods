@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from src.bot import Bot
 from src.config import Config
 from src.utils import Utils
