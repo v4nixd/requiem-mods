@@ -1,4 +1,6 @@
 bot:
+  server:
+    id: 1457054525205643331
   activity:
     status: "online"
     name: "Text under nickname in member list"
@@ -26,3 +28,8 @@ bot:
     partner:
       id: 0
       name: "Partner"
+  channels:
+    stats_membercount:
+      id: 0
+      name: "Member count channel"
+      template: "ᴀʟʟ ᴍᴇᴍʙᴇʀs: {count}"
