@@ -1,0 +1,9 @@
+bot:
+  activity:
+    status: "online"
+    name: "Text under nickname in member list"
+    type: "playing"
+  roles:
+    autorole:
+      id: 0
+      name: "Auto-role"
