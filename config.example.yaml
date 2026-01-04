@@ -23,3 +23,6 @@ bot:
     moderator:
       id: 0
       name: "Moderator"
+    partner:
+      id: 0
+      name: "Partner"

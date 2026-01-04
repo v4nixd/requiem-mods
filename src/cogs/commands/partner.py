@@ -1,16 +1,14 @@
-import asyncio
-
 from disnake import AppCmdInter, Member, User, Message
 from disnake.ext import commands
 
 from src.config import Config
 
 
-class VerifyCommand(commands.Cog):
+class PartnerCommand(commands.Cog):
     def __init__(self, bot: commands.InteractionBot) -> None:
         self.bot: commands.InteractionBot = bot
         self.config: Config = Config.get_instance()
-        print("VerifyCommand cog loaded")
+        print("PartnerCommand cog loaded")
 
     async def check_perms(self, target: Member) -> bool:
         roles_dict = self.config.get_config()["bot"]["roles"]
@@ -26,10 +24,11 @@ class VerifyCommand(commands.Cog):
         for role in roles_list:
             if role in target.roles:
                 roles_count += 1
+                break
 
         return roles_count > 0
 
-    async def verify(self, inter: AppCmdInter, target: Member) -> None:
+    async def partner(self, inter: AppCmdInter, target: Member) -> None:
         await inter.response.defer(ephemeral=True)
 
         author = inter.author
@@ -43,30 +42,19 @@ class VerifyCommand(commands.Cog):
 
         roles_dict = self.config.get_config()["bot"]["roles"]
 
-        autorole = target.guild.get_role(roles_dict["autorole"]["id"])
-        verified_role = target.guild.get_role(roles_dict["verified"]["id"])
+        partner = target.guild.get_role(roles_dict["partner"]["id"])
 
-        if not autorole or not verified_role:
-            raise ValueError("Couldn't fetch Auto role or Verified role")
-
-        if verified_role in target.roles:
-            await inter.edit_original_response(
-                f"У этого пользователя уже есть роль {verified_role.mention}.\nПытаюсь забрать {autorole.mention}"
-            )
-            await target.remove_roles(autorole, reason=f"Verification by {author.id}")
+        if not partner:
+            raise ValueError("Couldn't fetch Partner role")
             return
 
-        if autorole not in target.roles:
+        if partner in target.roles:
             await inter.edit_original_response(
-                f"У этого пользователя уже нету роли {autorole.mention}.\nПытаюсь выдать {verified_role.mention}"
+                f"У этого пользователя уже есть роль {partner.mention}"
             )
-            await target.add_roles(verified_role, reason=f"Verification by {author.id}")
             return
 
-        await target.remove_roles(autorole, reason=f"Verification by {author.id}")
-        await target.add_roles(verified_role, reason=f"Verification by {author.id}")
-
-        await asyncio.sleep(1)
+        await target.add_roles(partner, reason=f"Partner verification by {author.id}")
 
         target = await target.guild.fetch_member(target.id)
 
@@ -76,15 +64,15 @@ class VerifyCommand(commands.Cog):
         result_string = "\n".join(role.mention for role in result_roles)
 
         await inter.edit_original_response(
-            f"{target.mention} успешно верифицирован!\n\nСписок ролей пользователя:\n{result_string}"
+            f"{target.mention} теперь наш партнер\n\nСписок ролей пользователя:\n{result_string}"
         )
 
-    @commands.slash_command(name="verify")
+    @commands.slash_command(name="partner")
     @commands.guild_only()
     async def slash(self, inter: AppCmdInter, target: Member) -> None:
-        await self.verify(inter, target)
+        await self.partner(inter, target)
 
-    @commands.user_command(name="Верифицировать")
+    @commands.user_command(name="Сделать партнером")
     @commands.guild_only()
     async def user(self, inter: AppCmdInter, user: User) -> None:
         if inter.guild:
@@ -97,9 +85,9 @@ class VerifyCommand(commands.Cog):
         if not member:
             return
 
-        await self.verify(inter, member)
+        await self.partner(inter, member)
 
-    @commands.message_command(name="Верифицировать")
+    @commands.message_command(name="Сделать партнером")
     @commands.guild_only()
     async def message(self, inter: AppCmdInter, message: Message) -> None:
         author = message.author
@@ -107,8 +95,8 @@ class VerifyCommand(commands.Cog):
         if not isinstance(author, Member):
             return
 
-        await self.verify(inter, author)
+        await self.partner(inter, author)
 
 
 def setup(bot: commands.InteractionBot) -> None:
-    bot.add_cog(VerifyCommand(bot))
+    bot.add_cog(PartnerCommand(bot))
