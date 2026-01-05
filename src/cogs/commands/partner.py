@@ -2,6 +2,7 @@ from disnake import AppCmdInter, Member, User, Message
 from disnake.ext import commands
 
 from src.config import Config
+from src.utils import Utils
 
 
 class PartnerCommand(commands.Cog):
@@ -9,24 +10,6 @@ class PartnerCommand(commands.Cog):
         self.bot: commands.InteractionBot = bot
         self.config: Config = Config.get_instance()
         print("PartnerCommand cog loaded")
-
-    async def check_perms(self, target: Member) -> bool:
-        roles_dict = self.config.get_config()["bot"]["roles"]
-
-        owner_role = await target.guild.fetch_role(roles_dict["owner"]["id"])
-        admin_role = await target.guild.fetch_role(roles_dict["admin"]["id"])
-        trusted_role = await target.guild.fetch_role(roles_dict["trusted"]["id"])
-        moderator_role = await target.guild.fetch_role(roles_dict["moderator"]["id"])
-
-        roles_list = [owner_role, admin_role, trusted_role, moderator_role]
-        roles_count = 0
-
-        for role in roles_list:
-            if role in target.roles:
-                roles_count += 1
-                break
-
-        return roles_count > 0
 
     async def partner(self, inter: AppCmdInter, target: Member) -> None:
         await inter.response.defer(ephemeral=True)
@@ -36,7 +19,7 @@ class PartnerCommand(commands.Cog):
         if not isinstance(author, Member):
             return
 
-        if not await self.check_perms(author):
+        if not await Utils.is_admin(author):
             await inter.edit_original_response("🔒 У вас недостаточно прав")
             return
 
@@ -46,7 +29,6 @@ class PartnerCommand(commands.Cog):
 
         if not partner:
             raise ValueError("Couldn't fetch Partner role")
-            return
 
         if partner in target.roles:
             await inter.edit_original_response(

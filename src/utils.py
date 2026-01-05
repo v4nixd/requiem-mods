@@ -1,4 +1,4 @@
-from disnake import Activity, ActivityType, Status
+from disnake import Activity, ActivityType, Status, Member
 from disnake.ext import commands
 
 from src.config import Config
@@ -23,3 +23,22 @@ class Utils:
             ),
             status=Status[activity["status"]],
         )
+
+    @staticmethod
+    async def is_admin(target: Member) -> bool:
+        roles_dict = Config.get_instance().get_config()["bot"]["roles"]
+
+        owner_role = await target.guild.fetch_role(roles_dict["owner"]["id"])
+        admin_role = await target.guild.fetch_role(roles_dict["admin"]["id"])
+        trusted_role = await target.guild.fetch_role(roles_dict["trusted"]["id"])
+        moderator_role = await target.guild.fetch_role(roles_dict["moderator"]["id"])
+
+        roles_list = [owner_role, admin_role, trusted_role, moderator_role]
+        roles_count = 0
+
+        for role in roles_list:
+            if role in target.roles:
+                roles_count += 1
+                break
+
+        return roles_count > 0
