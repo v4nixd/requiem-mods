@@ -1,6 +1,4 @@
-import asyncio
-
-from disnake import AppCmdInter, Member, User, Message
+from disnake import AppCmdInter, Member, User, Message, Guild
 from disnake.ext import commands
 
 from src.config import Config
@@ -18,7 +16,7 @@ class VerifyCommand(commands.Cog):
 
         author = inter.author
 
-        if not isinstance(author, Member):
+        if not Utils.is_member(author):
             return
 
         if not await Utils.is_admin(author):
@@ -26,7 +24,6 @@ class VerifyCommand(commands.Cog):
             return
 
         roles_dict = self.config.get_config()["bot"]["roles"]
-
         autorole = target.guild.get_role(roles_dict["autorole"]["id"])
         verified_role = target.guild.get_role(roles_dict["verified"]["id"])
 
@@ -49,8 +46,6 @@ class VerifyCommand(commands.Cog):
 
         await target.remove_roles(autorole, reason=f"Verification by {author.id}")
         await target.add_roles(verified_role, reason=f"Verification by {author.id}")
-
-        await asyncio.sleep(1)
 
         target = await target.guild.fetch_member(target.id)
 
