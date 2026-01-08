@@ -2,34 +2,56 @@ bot:
   server:
     id: 1457054525205643331
   activity:
-    status: "online"
-    name: "Text under nickname in member list"
+    status: "idle"
+    name: "🚧 DEV MODE"
     type: "playing"
   roles:
-    roles:
     autorole:
-      id: 0
+      id: 1457098745970950145
       name: "Auto-role"
     verified:
-      id: 0
+      id: 1457098813365026939
       name: "Verified"
     owner:
-      id: 0
+      id: 1457083591266926696
       name: "Owner"
     admin:
-      id: 0
+      id: 1457135636472402182
       name: "Admin"
     trusted:
-      id: 0
+      id: 1457127953535209472
       name: "Trusted"
     moderator:
-      id: 0
+      id: 1457127472775565625
       name: "Moderator"
     partner:
-      id: 0
+      id: 1457395670368653569
       name: "Partner"
   channels:
     stats_membercount:
-      id: 0
+      id: 1457098492387393556
       name: "Member count channel"
       template: "ᴀʟʟ ᴍᴇᴍʙᴇʀs: {count}"
+  categories:
+    mod_tickets:
+      id: 1458944075645452329
+  modals:
+    mod_ticket:
+      title: "MOD_TICKET_TITLE"
+      timeout: 600
+      custom_id: "mod_ticket"
+      questions:
+        - label: "Сколько вы проводите времени за компьютером?"
+          style: "short"
+          placeholder: "1ч-24ч"
+          custom_id: "pc_time"
+
+        - label: "Какой у вас часовой пояс от МСК?"
+          style: "short"
+          placeholder: "-2 мск"
+          custom_id: "timezone"
+
+        - label: "Почему мы можем доверится именно вам?"
+          style: "long"
+          placeholder: ""
+          custom_id: "trust_reason"
