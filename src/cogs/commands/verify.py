@@ -1,4 +1,4 @@
-from disnake import AppCmdInter, Member, User, Message, Guild
+from disnake import AppCmdInter, Member, User, Message
 from disnake.ext import commands
 
 from src.config import Config
@@ -16,7 +16,7 @@ class VerifyCommand(commands.Cog):
 
         author = inter.author
 
-        if not Utils.is_member(author):
+        if not isinstance(author, Member):
             return
 
         if not await Utils.is_admin(author):
