@@ -1,4 +1,4 @@
-from disnake import Activity, ActivityType, Status, Member, User, Guild
+from disnake import Activity, ActivityType, Status, Member, Guild
 from disnake.ext import commands
 
 from src.config import Config
@@ -44,12 +44,9 @@ class Utils:
         return roles_count > 0
 
     @staticmethod
-    def is_member(target: User | Member) -> bool:
-        if isinstance(target, Member):
-            return True
-        else:
-            return False
-
-    @staticmethod
     async def get_guild(bot: commands.InteractionBot) -> Guild:
-        return bot.get_guild(Config.get_instance().get_config()["bot"]["server"]["id"])
+        guild = bot.get_guild(Config.get_instance().get_config()["bot"]["server"]["id"])
+        if guild:
+            return guild
+        else:
+            raise ValueError("Guild not found")
