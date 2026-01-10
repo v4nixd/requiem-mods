@@ -6,9 +6,4 @@ def success_embed(msg: str, desc: str | None = None, **kwargs) -> Embed:
 
 
 def error_embed(error_msg: str, **kwargs) -> Embed:
-    return Embed(
-        title="Ошибка!",
-        description=error_msg,
-        colour=Colour.red(),
-        **kwargs
-    )
+    return Embed(title="Ошибка!", description=error_msg, colour=Colour.red(), **kwargs)

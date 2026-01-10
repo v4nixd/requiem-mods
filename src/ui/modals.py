@@ -1,10 +1,13 @@
+from datetime import datetime, timezone
+
 from disnake import (
     ui,
     TextInputStyle,
     ModalInteraction,
     TextChannel,
     CategoryChannel,
-    Member, Embed,
+    Member,
+    Embed,
 )
 
 from src.config import Config
@@ -45,7 +48,7 @@ class ModTicketModal(ui.Modal):
 
         for question in questions:
             answers_formatted += (
-                f"{question['label']}: `{answers[question['custom_id']]}`\n"
+                f"{question['label']} : `{answers[question['custom_id']]}`\n"
             )
 
         return answers_formatted
@@ -97,13 +100,27 @@ class ModTicketModal(ui.Modal):
         else:
             raise ValueError("Author is not a member")
 
+        created_at = inter.author.created_at
+        joined_at = inter.author.joined_at
+        now = datetime.now(timezone.utc)
+
+        created_at_strftime = created_at.strftime("%d/%m/%Y")
+        created_at_days = (now - created_at).days
+        joined_at_strftime = joined_at.strftime("%d/%m/%Y") if joined_at else "None"
+        joined_at_days = (now - joined_at).days if joined_at else 0
+
         ticket_init_embed = Embed(
-            title=""
+            title="📦 Новый тикет",
+            description=f"👤 **Заявитель** : {inter.author.mention}\n🆔 **ID** : {inter.author.id}\n📅 **Аккаунт создан** : {created_at_strftime} ({created_at_days} дней)\n🏠 **На сервере с** : {joined_at_strftime} ({joined_at_days} дней)",
+        )
+        ticket_init_embed.add_field(
+            name="Вопросы и ответы заявителя",
+            value=self.format_answers(inter.text_values),
         )
 
         await channel.set_permissions(author, view_channel=True, send_messages=True)
         await channel.send(
-            f"📦 {inter.author.mention} открыл тикет\n\n{self.format_answers(inter.text_values)}"
+            embed=ticket_init_embed,
         )
 
         return channel, True
