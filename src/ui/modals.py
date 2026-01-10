@@ -13,6 +13,7 @@ from disnake import (
 from src.config import Config
 from src.utils import Utils
 from src.ui.embeds import success_embed, error_embed
+from src.ui.views import ModTicketControlsView
 
 
 class ModTicketModal(ui.Modal):
@@ -121,6 +122,7 @@ class ModTicketModal(ui.Modal):
         await channel.set_permissions(author, view_channel=True, send_messages=True)
         await channel.send(
             embed=ticket_init_embed,
+            view=ModTicketControlsView(),
         )
 
         return channel, True
