@@ -4,10 +4,12 @@ from disnake import (
     ModalInteraction,
     TextChannel,
     CategoryChannel,
-    Member,
+    Member, Embed,
 )
 
 from src.config import Config
+from src.utils import Utils
+from src.ui.embeds import success_embed, error_embed
 
 
 class ModTicketModal(ui.Modal):
@@ -59,11 +61,30 @@ class ModTicketModal(ui.Modal):
 
         return category
 
-    async def create_channel(self, inter: ModalInteraction) -> TextChannel:
+    async def ticket_exists_check(self, inter: ModalInteraction) -> bool:
+        category = await self.get_category(inter)
+        userid = inter.author.id
+
+        if len(category.channels) > 0:
+            return False
+
+        for channel in category.channels:
+            return True if str(userid) in channel.name else False
+        return True
+
+    async def create_channel(self, inter: ModalInteraction) -> tuple[TextChannel, bool]:
         if not inter.guild:
             raise ValueError("Guild is None")
 
         category = await self.get_category(inter)
+
+        if not await self.ticket_exists_check(inter):
+            channel = await Utils.get_channel_from_list(
+                str(inter.author.id), category.channels
+            )
+
+            return channel, False
+
         channel = await inter.guild.create_text_channel(
             f"📦-{inter.author.id}",
             reason=f"{inter.author.id} opened a ticket",
@@ -76,15 +97,26 @@ class ModTicketModal(ui.Modal):
         else:
             raise ValueError("Author is not a member")
 
+        ticket_init_embed = Embed(
+            title=""
+        )
+
         await channel.set_permissions(author, view_channel=True, send_messages=True)
         await channel.send(
             f"📦 {inter.author.mention} открыл тикет\n\n{self.format_answers(inter.text_values)}"
         )
 
-        return channel
+        return channel, True
 
     async def callback(self, inter: ModalInteraction) -> None:
-        channel: TextChannel = await self.create_channel(inter)
-        await inter.response.send_message(
-            f"📦 Тикет успешно открыт - {channel.mention}", ephemeral=True
-        )
+        channel, success = await self.create_channel(inter)
+        if success:
+            await inter.response.send_message(
+                embed=success_embed("Тикет успешно открыт", desc=channel.mention),
+                ephemeral=True,
+            )
+        else:
+            await inter.response.send_message(
+                embed=error_embed(f"У вас уже есть открытый тикет - {channel.mention}"),
+                ephemeral=True,
+            )

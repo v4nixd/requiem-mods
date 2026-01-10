@@ -1,7 +1,8 @@
-from disnake import Activity, ActivityType, Status, Member, Guild
+from disnake import Activity, ActivityType, Status, Member, Guild, TextChannel
 from disnake.ext import commands
 
 from src.config import Config
+from src._types import DiscordChannel
 
 
 class Utils:
@@ -50,3 +51,13 @@ class Utils:
             return guild
         else:
             raise ValueError("Guild not found")
+
+    @staticmethod
+    async def get_channel_from_list(
+        target: str, channels: list[DiscordChannel]
+    ) -> TextChannel:
+        for channel in channels:
+            if target in channel.name and isinstance(channel, TextChannel):
+                return channel
+        else:
+            raise ValueError(f"Channel `{target}` not found")
