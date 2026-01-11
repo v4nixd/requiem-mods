@@ -15,6 +15,9 @@ bot:
     owner:
       id: 1457083591266926696
       name: "Owner"
+    dep_owner:
+      id: 1458866457948459199
+      name: "Dep Owner"
     admin:
       id: 1457135636472402182
       name: "Admin"
@@ -35,6 +38,8 @@ bot:
   categories:
     mod_tickets:
       id: 1458944075645452329
+    archive_mod_tickets:
+      id: 1459395263612584018
   modals:
     mod_ticket:
       title: "MOD_TICKET_TITLE"

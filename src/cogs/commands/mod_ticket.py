@@ -42,7 +42,9 @@ class ModTicket(commands.Cog):
     @ticket_command.error
     async def ticket_command_error(self, inter: AppCmdInter, error: Exception):
         if isinstance(error, commands.MissingPermissions):
-            await inter.response.send_message(embed=error_embed("Недостаточно прав"), ephemeral=True)
+            await inter.response.send_message(
+                embed=error_embed("Недостаточно прав"), ephemeral=True
+            )
             return
         await inter.response.send_message(embed=error_embed(str(error)), ephemeral=True)
 
