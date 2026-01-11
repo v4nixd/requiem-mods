@@ -1,7 +1,15 @@
 import time
 import asyncio
 
-from disnake import ui, ButtonStyle, MessageInteraction, Member, Embed, TextChannel
+from disnake import (
+    ui,
+    ButtonStyle,
+    MessageInteraction,
+    Member,
+    Embed,
+    TextChannel,
+    PartialEmoji,
+)
 
 from src.ui.embeds import error_embed, success_embed
 from src.config import Config
@@ -57,7 +65,7 @@ class ModTicketControlsView(ui.View):
         return guild.get_member(int(ticket_issuer_id)), ticket_issuer_id
 
     @ui.button(
-        style=ButtonStyle.red, custom_id="mod-ticket-close", emoji="🔒", label="Закрыть"
+        style=ButtonStyle.gray, custom_id="mod-ticket-close", emoji=PartialEmoji(name="close", id=1459986490737295622), label="Закрыть"
     )
     async def close_ticket(self, button: ui.Button, inter: MessageInteraction) -> None:
         if not await self.check_perms(inter):
@@ -101,7 +109,7 @@ class ModTicketControlsView(ui.View):
         await inter.response.send_message(embed=success_embed("Тикет успешно закрыт"))
 
     @ui.button(
-        style=ButtonStyle.red, custom_id="mod-ticket-delete", emoji="🗑️", label="Удалить"
+        style=ButtonStyle.red, custom_id="mod-ticket-delete", emoji=PartialEmoji(name="trash", id=1459986489088675900), label="Удалить"
     )
     async def delete_ticket(self, button: ui.Button, inter: MessageInteraction) -> None:
         if not await self.check_perms(inter):
@@ -134,7 +142,7 @@ class ModTicketControlsView(ui.View):
     @ui.button(
         style=ButtonStyle.gray,
         custom_id="mod-ticket-archive",
-        emoji="🗃️",
+        emoji=PartialEmoji(name="archive", id=1459986487360622624),
         label="Архивировать",
     )
     async def archive_ticket(

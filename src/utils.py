@@ -55,9 +55,9 @@ class Utils:
     @staticmethod
     async def get_channel_from_list(
         target: str, channels: list[DiscordChannel]
-    ) -> TextChannel:
+    ) -> TextChannel | None:
         for channel in channels:
             if target in channel.name and isinstance(channel, TextChannel):
                 return channel
         else:
-            raise ValueError(f"Channel `{target}` not found")
+            return None

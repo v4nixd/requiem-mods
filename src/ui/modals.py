@@ -87,7 +87,8 @@ class ModTicketModal(ui.Modal):
                 str(inter.author.id), category.channels
             )
 
-            return channel, False
+            if channel:
+                return channel, False
 
         channel = await inter.guild.create_text_channel(
             f"📦-{inter.author.id}",
@@ -110,9 +111,15 @@ class ModTicketModal(ui.Modal):
         joined_at_strftime = joined_at.strftime("%d/%m/%Y") if joined_at else "None"
         joined_at_days = (now - joined_at).days if joined_at else 0
 
+        user_emoji = "<:user:1459985193535406284>"
+        id_emoji = "<:id:1459985211583627315>"
+        calendar_emoji = "<:calendar:1459985212837466215>"
+        home_emoji = "<:home:1459985214607724636>"
+        box_emoji = "<:box:1459986492687519839>"
+
         ticket_init_embed = Embed(
-            title="📦 Новый тикет",
-            description=f"👤 **Заявитель** : {inter.author.mention}\n🆔 **ID** : {inter.author.id}\n📅 **Аккаунт создан** : {created_at_strftime} ({created_at_days} дней)\n🏠 **На сервере с** : {joined_at_strftime} ({joined_at_days} дней)",
+            title=f"{box_emoji} Новый тикет",
+            description=f"{user_emoji} **Заявитель** : {inter.author.mention}\n{id_emoji} **ID** : {inter.author.id}\n{calendar_emoji} **Аккаунт создан** : {created_at_strftime} ({created_at_days} дней)\n{home_emoji} **На сервере с** : {joined_at_strftime} ({joined_at_days} дней)",
         )
         ticket_init_embed.add_field(
             name="Вопросы и ответы заявителя",
