@@ -2,6 +2,7 @@ from disnake import Guild
 from disnake.ext import commands, tasks
 
 from src.config import Config
+from src.ui.views import ModTicketControlsView
 
 
 class OnReadyEvent(commands.Cog):
@@ -24,6 +25,8 @@ class OnReadyEvent(commands.Cog):
 
         if not self.server_stats.is_running():
             self.server_stats.start()
+
+        self.bot.add_view(ModTicketControlsView())
 
     @tasks.loop(seconds=10)
     async def server_stats(self) -> None:
