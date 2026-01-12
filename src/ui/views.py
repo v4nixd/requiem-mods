@@ -176,13 +176,17 @@ class ModTicketControlsView(ui.View):
         archive_category = guild.get_channel(int(archive_category_id))
         archive_time = int(time.time())
 
+        archive_emoji = "<:archive:1459986487360622624>"
+        user_emoji = "<:user:1459985193535406284>"
+        time_emoji = "<:time:1460063328519979259>"
+
         await channel.edit(
             category=archive_category, reason=f"Ticket archive by {inter.author.id}"
         )
         await channel.send(
             embed=Embed(
-                title="🗃️ Тикет был архивирован",
-                description=f"👤 **Инициатор** : {inter.author.mention}\n🕒 **Время** : <t:{archive_time}:F>",
+                title=f"{archive_emoji} Тикет был архивирован",
+                description=f"{user_emoji} **Инициатор** : {inter.author.mention}\n{time_emoji} **Время** : <t:{archive_time}:F>",
             )
         )
         await inter.response.send_message(
