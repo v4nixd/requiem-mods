@@ -106,7 +106,19 @@ class ModTicketControlsView(ui.View):
             reason=f"Ticket closed by {inter.author.id}",
         )
 
-        await inter.response.send_message(embed=success_embed("Тикет успешно закрыт"))
+        close_time = int(time.time())
+
+        close_emoji = "<:close:1459986490737295622>"
+        user_emoji = "<:user:1459985193535406284>"
+        time_emoji = "<:time:1460063328519979259>"
+
+        await channel.send(
+            embed=Embed(
+                title=f"{close_emoji} Тикет был закрыт",
+                description=f"{user_emoji} **Инициатор** : {inter.author.mention}\n{time_emoji} **Время** : <t:{close_time}:F> (<t:{close_time}:R>)",
+            )
+        )
+        await inter.response.send_message(embed=success_embed("Тикет успешно закрыт"), ephemeral=True)
 
     @ui.button(
         style=ButtonStyle.red, custom_id="mod-ticket-delete", emoji=PartialEmoji(name="trash", id=1459986489088675900), label="Удалить"
@@ -186,7 +198,7 @@ class ModTicketControlsView(ui.View):
         await channel.send(
             embed=Embed(
                 title=f"{archive_emoji} Тикет был архивирован",
-                description=f"{user_emoji} **Инициатор** : {inter.author.mention}\n{time_emoji} **Время** : <t:{archive_time}:F>",
+                description=f"{user_emoji} **Инициатор** : {inter.author.mention}\n{time_emoji} **Время** : <t:{archive_time}:F> (<t:{archive_time}:R>)",
             )
         )
         await inter.response.send_message(
