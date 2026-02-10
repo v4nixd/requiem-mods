@@ -65,7 +65,10 @@ class ModTicketControlsView(ui.View):
         return guild.get_member(int(ticket_issuer_id)), ticket_issuer_id
 
     @ui.button(
-        style=ButtonStyle.gray, custom_id="mod-ticket-close", emoji=PartialEmoji(name="close", id=1459986490737295622), label="Закрыть"
+        style=ButtonStyle.gray,
+        custom_id="mod-ticket-close",
+        emoji=PartialEmoji(name="close", id=1459986490737295622),
+        label="Закрыть",
     )
     async def close_ticket(self, button: ui.Button, inter: MessageInteraction) -> None:
         if not await self.check_perms(inter):
@@ -118,10 +121,15 @@ class ModTicketControlsView(ui.View):
                 description=f"{user_emoji} **Инициатор** : {inter.author.mention}\n{time_emoji} **Время** : <t:{close_time}:F> (<t:{close_time}:R>)",
             )
         )
-        await inter.response.send_message(embed=success_embed("Тикет успешно закрыт"), ephemeral=True)
+        await inter.response.send_message(
+            embed=success_embed("Тикет успешно закрыт"), ephemeral=True
+        )
 
     @ui.button(
-        style=ButtonStyle.red, custom_id="mod-ticket-delete", emoji=PartialEmoji(name="trash", id=1459986489088675900), label="Удалить"
+        style=ButtonStyle.red,
+        custom_id="mod-ticket-delete",
+        emoji=PartialEmoji(name="trash", id=1459986489088675900),
+        label="Удалить",
     )
     async def delete_ticket(self, button: ui.Button, inter: MessageInteraction) -> None:
         if not await self.check_perms(inter):

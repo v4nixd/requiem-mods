@@ -5,6 +5,7 @@ from disnake import (
     ButtonStyle,
     MessageInteraction,
     PartialEmoji,
+    Member
 )
 from disnake.ext import commands
 
@@ -24,7 +25,7 @@ class ModTicket(commands.Cog):
             ui.Container(
                 ui.MediaGallery(
                     MediaGalleryItem(
-                        media="https://assets.rqm.bet/images/rqm-mods-nabor.png"
+                        media="https://i.postimg.cc/d1wnQkMW/rqm-mods-nabor.png"
                     )
                 ),
                 ui.ActionRow(
@@ -32,21 +33,25 @@ class ModTicket(commands.Cog):
                         style=ButtonStyle.gray,
                         label="Подать заявку",
                         custom_id="open-mod-ticket",
-                        emoji=PartialEmoji(name="openicon", id=1459973589959708867),
+                        emoji=PartialEmoji(
+                            name="openicon", id=1459973589959708867),
                     )
                 ),
             )
         ]
-        await inter.channel.send(components=ticket_starter_components)
 
-    @ticket_command.error
-    async def ticket_command_error(self, inter: AppCmdInter, error: Exception):
-        if isinstance(error, commands.MissingPermissions):
-            await inter.response.send_message(
-                embed=error_embed("Недостаточно прав"), ephemeral=True
-            )
+        author = inter.author
+
+        if not isinstance(author, Member):
+            await inter.response.send_message(embed=error_embed("Автор команды не является участником сервера"), ephemeral=True)
             return
-        await inter.response.send_message(embed=error_embed(str(error)), ephemeral=True)
+
+        if not author.guild_permissions.administrator:
+            await inter.response.send_message(embed=error_embed("Недостаточно прав"), ephemeral=True)
+            return
+
+        await inter.channel.send(components=ticket_starter_components)
+        await inter.response.send_message("✅", ephemeral=True)
 
     @commands.Cog.listener()
     async def on_button_click(self, inter: MessageInteraction) -> None:
