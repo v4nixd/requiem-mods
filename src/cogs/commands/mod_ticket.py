@@ -5,7 +5,8 @@ from disnake import (
     ButtonStyle,
     MessageInteraction,
     PartialEmoji,
-    Member
+    Member,
+    File
 )
 from disnake.ext import commands
 
@@ -21,11 +22,16 @@ class ModTicket(commands.Cog):
     @commands.slash_command(name="modticket", description="test")
     @commands.has_permissions(administrator=True)
     async def ticket_command(self, inter: AppCmdInter) -> None:
+        banner_file = File(
+            "assets/mod_ticket_banner.png",
+            filename="mod_ticket_banner.png"
+        )
+
         ticket_starter_components = [
             ui.Container(
                 ui.MediaGallery(
                     MediaGalleryItem(
-                        media="https://i.postimg.cc/d1wnQkMW/rqm-mods-nabor.png"
+                        media="attachment://mod_ticket_banner.png",
                     )
                 ),
                 ui.ActionRow(
@@ -50,8 +56,8 @@ class ModTicket(commands.Cog):
             await inter.response.send_message(embed=error_embed("Недостаточно прав"), ephemeral=True)
             return
 
-        await inter.channel.send(components=ticket_starter_components)
         await inter.response.send_message("✅", ephemeral=True)
+        await inter.channel.send(components=ticket_starter_components, file=banner_file)
 
     @commands.Cog.listener()
     async def on_button_click(self, inter: MessageInteraction) -> None:
